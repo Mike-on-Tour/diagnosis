@@ -1,0 +1,17 @@
+services:
+    mot.diagnosis.controller.mot_diagnosis_acp:
+        class: mot\diagnosis\controller\mot_diagnosis_acp
+        arguments:
+            - '@dbal.conn'
+            - '@template'
+            - '@user'
+            - '@mot.diagnosis.mot_diagnosis_cron_manager'
+
+    mot.diagnosis.mot_diagnosis_cron_manager:
+        class: mot\diagnosis\includes\mot_diagnosis_cron_manager
+        arguments:
+            - '@service_container'
+            - '@routing.helper'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '@template'

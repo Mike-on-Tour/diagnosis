@@ -1,0 +1,37 @@
+{
+	"name": "mot/diagnosis",
+	"type": "phpbb-extension",
+	"description": "An extension to get pgpBB diagnosis",
+	"homepage": "https://www.mike-on-tour.com",
+	"version": "0.0.1",
+	"time": "2025-10-28 12:11:57",
+	"keywords": ["phpbb", "extension", "diagnosis"],
+	"license": "GPL-2.0-only",
+	"authors": [
+		{
+			"name": "Michael Vormwald (Mike-on-Tour)",
+			"homepage": "https://www.mike-on-tour.com",
+			"email": "admin@mike-on-tour.com",
+			"role": "Developer"
+		}
+	],
+	"require": {
+        "php": ">=8.1.0,<8.5.0@dev",
+        "phpbb/phpbb": ">=3.3.0,<3.4.0@dev",
+        "composer/installers": "~1.0.0"
+	},
+	"require-dev": {
+		"phpbb/epv": "dev-master"
+	},
+	"extra": {
+		"display-name": "MoT phpBB Diagnosis",
+		"soft-require": {
+			"phpbb/phpbb": ">=3.3.0,<3.4.0@dev"
+		},
+		"version-check": {
+			"host": "www.mike-on-tour.com",
+			"directory": "/mot",
+			"filename": "mot_diagnosis.json"
+		}
+	}
+}

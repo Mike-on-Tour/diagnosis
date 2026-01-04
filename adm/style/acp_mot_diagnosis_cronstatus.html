@@ -1,0 +1,74 @@
+{#
+*
+* @package MoT phpBB Diagnosis v0.0.1
+* @copyright (c) 2025 Mike-on-Tour
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+*
+#}
+
+{% include 'overall_header.html' %}
+
+<h1>{{ lang('ACP_MOT_DIAGNOSIS') ~ ' - ' ~ lang('ACP_MOT_DIAGNOSIS_CRONSTATUS') }}</h1>
+
+<br>
+
+<p>{{ lang('ACP_MOT_DIAGNOSIS_CRON_TABLE_EXPL') }}</p>
+
+<table class="table1 zebra-table fixed-width-table">
+	<thead>
+		<tr>
+			<th >{{ lang('ACP_MOT_DIAGNOSIS_CRON_NAME') }}</th>
+			<th >{{ lang('ACP_MOT_DIAGNOSIS_CRON_CLASS') }}</th>
+			<th >{{ lang('ACP_MOT_DIAGNOSIS_CRON_GC') }}</th>
+			<th >{{ lang('ACP_MOT_DIAGNOSIS_CRON_LAST_GC') }}</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		{% for task in ACP_MOT_DIAGNOSIS_CRON_TASKS %}
+			<tr>
+				<td style="font-weight: bold; {% if task.active %}color: green;{% else %}color: darkblue;{% endif %}">
+					{{ task.name }}
+					{% if task.should_run %} * {% endif %}
+				</td>
+				<td>{{ task.class }}</td>
+				<td>{{ task.gc }}</td>
+				<td>{{ task.last_gc }}</td>
+			</tr>
+		{% else %}
+			<tr>
+				<td colspan="3" style="text-align: center;">{{ lang('ACP_MOT_DIAGNOSIS_NO_ENTRIES') }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<br><br>
+
+<p>{{ lang('ACP_MOT_DIAGNOSIS_CONFIG_TABLE_EXPL') }}</p>
+
+<table class="table1 zebra-table fixed-width-table">
+	<thead>
+	</thead>
+		<tr>
+			<th >{{ lang('ACP_MOT_DIAGNOSIS_CONFIG_NAME') }}</th>
+			<th >{{ lang('ACP_MOT_DIAGNOSIS_CRON_GC') }}</th>
+			<th >{{ lang('ACP_MOT_DIAGNOSIS_CRON_LAST_GC') }}</th>
+		</tr>
+
+	<tbody>
+		{% for task in ACP_MOT_DIAGNOSIS_CONFIG_TASKS %}
+			<tr>
+				<td>{{ task.name }}</td>
+				<td>{{ task.gc }}</td>
+				<td>{{ task.last_gc }}</td>
+			</tr>
+		{% else %}
+			<tr>
+				<td colspan="3" style="text-align: center;">{{ lang('ACP_MOT_DIAGNOSIS_NO_ENTRIES') }}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% include 'overall_footer.html' %}

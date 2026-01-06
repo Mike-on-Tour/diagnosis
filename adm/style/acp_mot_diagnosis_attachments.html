@@ -1,0 +1,151 @@
+{#
+*
+* @package MoT phpBB Diagnosis v0.1.0
+* @copyright (c) 2025 - 2026 Mike-on-Tour
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+*
+#}
+
+{% include 'overall_header.html' %}
+{% INCLUDECSS '@mot_diagnosis/mot_diagnosis_acp.css' %}
+{% import "acp_mot_diagnosis_macro.html" as forms %}
+{% INCLUDEJS '@mot_diagnosis/mot_diagnosis_acp.js' %}
+
+<h1>{{ lang('ACP_MOT_DIAGNOSIS') ~ ' - ' ~ lang('ACP_MOT_DIAGNOSIS_ATTACHMENTS') }}</h1>
+<p>{{ lang('ACP_MOT_DIAGNOSIS_ATTACHMENTS_EXPL') }}</p>
+
+<br>
+
+<form id="mot_diagnosis_attachment_select_form" method="post" action="{{ U_ACTION }}">
+	<fieldset class="quick">
+		{{ lang('ACP_MOT_DIAGNOSIS_ATTM_SELECT') }}
+		{{ forms.select('mot_diagnosis_attachment_select', ACP_MOT_DIAGNOSIS_ATTM_SELECT) }}
+		<input type="submit" class="button2" value="{{ lang('GO') }}">
+	</fieldset>
+
+	<br>
+
+	{% if ACP_MOT_DIAGNOSIS_ATTM_SELECTED == 'orphaned_items' %}
+		<p>{{ lang('ACP_MOT_DIAGNOSIS_ATTM_TABLE_EXPL') }}</p>
+
+		<div class="pagination top-pagination">
+			{% if ACP_MOT_DIAGNOSIS_ORPHANED_ITEMS_COUNT %}
+				{{ lang('ACP_MOT_DIAGNOSIS_ATTM_ITEMS', ACP_MOT_DIAGNOSIS_ORPHANED_ITEMS_COUNT) }}
+			{% endif %}
+			{% if pagination %}
+				&nbsp;&bull;&nbsp;{% include 'pagination.html' %}
+			{% endif %}
+		</div>
+
+		<table class="table1 zebra-table fixed-width-table">
+			<thead>
+				<tr>
+					<th>{{ lang('ACP_MOT_DIAGNOSIS_ATTM_PHYS_NAME') }}</th>
+					<th>{{ lang('ACP_MOT_DIAGNOSIS_ATTM_REAL_NAME') }}</th>
+					<th>{{ lang('ACP_MOT_DIAGNOSIS_ATTM_POST_ID') }}</th>
+					<th>{{ lang('ACP_MOT_DIAGNOSIS_ATTM_MSG_ID') }}</th>
+					<th style="text-align: center;">{{ lang('MARK') }}</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{% for item in ACP_MOT_DIAGNOSIS_ORPHANED_ITEMS %}
+					<tr>
+						<td>{{ item.physical_filename }}</td>
+						<td>{{ item.real_filename }}</td>
+						<td>
+							{% if item.post_id is defined %}
+								<a href="{{ ACP_MOT_DIAGNOSIS_SCRIPT_PATH }}/viewtopic.php?p={{ item.post_id }}#p{{ item.post_id }}" target="_blank" title="{{ lang('ACP_MOT_DIAGNOSIS_ATTM_POST_ID_TITLE') }}">
+									{{ item.post_id }}
+								</a>
+							{% endif %}
+						</td>
+						<td>
+							{% if item.msg_id is defined %}
+								{{ item.msg_id }}
+							{% endif %}
+						</td>
+						<td style="text-align: center;"><input type="checkbox" class="radio" name="mot_diagnosis_items_mark_delete[]" value="{{ item.attach_id }}"></td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="3" style="text-align: center;">{{ lang(ACP_MOT_DIAGNOSIS_NO_ITEMS) }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		{% if pagination %}
+			<div class="pagination">
+				{% include 'pagination.html' %}
+			</div>
+		{% endif %}
+
+		{% if ACP_MOT_DIAGNOSIS_ORPHANED_ITEMS_COUNT %}
+			<fieldset class="quick">
+				<input class="button2" type="submit" name="mot_diagnosis_del_marked_items" value="{{ lang('DELETE_MARKED') }}"><br>
+				<p class="small">
+					<a href="#" onclick="marklist('mot_diagnosis_attachment_select_form', 'mot_diagnosis_items_mark_delete', true); return false;">{{ lang('MARK_ALL') }}</a> &bull;
+					<a href="#" onclick="marklist('mot_diagnosis_attachment_select_form', 'mot_diagnosis_items_mark_delete', false); return false;">{{ lang('UNMARK_ALL') }}</a>
+				</p>
+			</fieldset>
+		{% endif %}
+	{% endif %}
+
+	{% if ACP_MOT_DIAGNOSIS_ATTM_SELECTED == 'orphaned_files' %}
+		<p>{{ lang('ACP_MOT_DIAGNOSIS_ENTRY_TABLE_EXPL') }}</p>
+
+		<div class="pagination top-pagination">
+			{% if ACP_MOT_DIAGNOSIS_ORPHANED_FILES_COUNT %}
+				{{ lang('ACP_MOT_DIAGNOSIS_ATTM_ITEMS', ACP_MOT_DIAGNOSIS_ORPHANED_FILES_COUNT) }}
+			{% endif %}
+			{% if pagination %}
+				&nbsp;&bull;&nbsp;{% include 'pagination.html' %}
+			{% endif %}
+		</div>
+
+		<table class="table1 zebra-table fixed-width-table">
+			<thead>
+			</thead>
+				<tr>
+					<th>{{ lang('ACP_MOT_DIAGNOSIS_ATTM_PHYS_NAME') }}</th>
+					<th style="text-align: center; width: 10%;">{{ lang('MARK') }}</th>
+				</tr>
+
+			<tbody>
+				{% for file in ACP_MOT_DIAGNOSIS_ORPHANED_FILES %}
+					<tr>
+						<td>{{ file }}</td>
+						<td style="text-align: center;"><input type="checkbox" class="radio" name="mot_diagnosis_files_mark_delete[]" value="{{ file }}"></td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="3" style="text-align: center;">{{ lang('ACP_MOT_DIAGNOSIS_NO_ENTRIES') }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+		{% if pagination %}
+			<div class="pagination">
+				{% include 'pagination.html' %}
+			</div>
+		{% endif %}
+
+		{% if ACP_MOT_DIAGNOSIS_ORPHANED_FILES_COUNT %}
+			<fieldset class="quick">
+				<input class="button2" type="submit" name="mot_diagnosis_del_marked_files" value="{{ lang('DELETE_MARKED') }}"><br>
+				<p class="small">
+					<a href="#" onclick="marklist('mot_diagnosis_attachment_select_form', 'mot_diagnosis_files_mark_delete', true); return false;">{{ lang('MARK_ALL') }}</a> &bull;
+					<a href="#" onclick="marklist('mot_diagnosis_attachment_select_form', 'mot_diagnosis_files_mark_delete', false); return false;">{{ lang('UNMARK_ALL') }}</a>
+				</p>
+			</fieldset>
+		{% endif %}
+	{% endif %}
+</form>
+
+<br><br>
+
+<p id="centered_text">{{ ACP_MOT_DIAGNOSIS_VERSION }}</p>
+
+{% include 'overall_footer.html' %}

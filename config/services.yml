@@ -2,10 +2,17 @@ services:
     mot.diagnosis.controller.mot_diagnosis_acp:
         class: mot\diagnosis\controller\mot_diagnosis_acp
         arguments:
+            - '@cache'
+            - '@config'
             - '@dbal.conn'
+            - '@language'
+            - '@pagination'
+            - '@ext.manager'
+            - '@request'
             - '@template'
             - '@user'
             - '@mot.diagnosis.mot_diagnosis_cron_manager'
+            - '%core.root_path%'
 
     mot.diagnosis.mot_diagnosis_cron_manager:
         class: mot\diagnosis\includes\mot_diagnosis_cron_manager

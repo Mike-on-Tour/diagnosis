@@ -4,6 +4,20 @@ All changes to `MoT phpBB Diagnosis` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.1.1] - 2026-01-08
+
+### Added
+-	A loading indicator to the attachments tab to show the user that something is happening when we need some time to load and sift through all the arrays to compare files and DB
+  
+### Changed
+  
+### Fixed
+-	A wrong `colspan` definition within the orphaned files table
+-	A wrong language variable within the orphaned files table
+   
+### Removed
+  
+  
 ## [0.1.0] - 2026-01-05
 
 ### Added

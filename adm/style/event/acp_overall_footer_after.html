@@ -1,0 +1,29 @@
+{#
+*
+* @package MoT phpBB Diagnosis v0.1.1
+* @copyright (c) 2025 - 2026 Mike-on-Tour
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+*
+#}
+
+<script>
+	// Get the language variables of the`'extension' tab and the attachmants link
+	let langExt = "{{ lang('ACP_CAT_DOT_MODS')|e('js') }}";
+	let langMenu = "{{ lang('ACP_MOT_DIAGNOSIS_ATTACHMENTS')|e('js') }}";
+
+	(function($) {  // Avoid conflicts with other libraries
+		// Get the active tab
+		let activeTab = $('.activetab').html();
+
+		// If the extensions tab is active, search for the attachments link (it is only there if the tab is active) and add an event handler which shows the loading indicator
+		if (activeTab.indexOf(langExt) > 0) {
+			$('li').each( function () {
+				if ($(this).html().indexOf(langMenu) > 0) {
+					$(this).on('click', function() {
+						$('#loading_indicator').show();
+					});
+				}
+			});
+		}
+	})(jQuery);
+</script>

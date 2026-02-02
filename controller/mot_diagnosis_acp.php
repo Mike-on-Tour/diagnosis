@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT phpBB Diagnosis v0.0.1
+* @package MoT phpBB Diagnosis v0.2.0
 * @copyright (c) 2025 - 2026 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -128,11 +128,22 @@ class mot_diagnosis_acp
 
 	public function attachments()
 	{
-		$cache_ttl = 300;	// Time-to-live for cached data
+		$this->sort_dir_arr = [
+			'ACP_MOT_DIAGNOSIS_SORT_DESC'	=> 'DESC',
+			'ACP_MOT_DIAGNOSIS_SORT_ASC'	=> 'ASC',
+		];
+		$cache_ttl = $this->config['session_length'];	// Time-to-live for cached data
 		$limit = $this->config['posts_per_page'];
 		$start = $this->request->variable('start', 0);
 		$attachment_selected = $this->request->variable('mot_diagnosis_attachment_select', 'orphaned_items');
-		$dir = $this->root_path . 'files';
+		$files_dir = $this->root_path . 'files';
+
+		// get sort variables from template (if we are in a loop of the pagination). At first call there are no variables from the (so far uncalled) template -> we have to set initial parameters for sorting
+		$last_selected = $this->request->variable('mot_diagnosis_last_select', '');
+
+		// Get the sort direction in case we are still in the same table or reset it to "ascending" if the other table was selected
+		$sort_dir = $last_selected == $attachment_selected ? $this->request->variable('sort_dir', '') : 'ASC';
+		$sort_key = $this->request->variable('sort_key', '');
 
 		// Check whether orphaned DB items are to be deleted
 		$del_items = $this->request->is_set('mot_diagnosis_del_marked_items');
@@ -148,9 +159,9 @@ class mot_diagnosis_acp
 					$this->db->sql_query($sql);
 
 					// Remove the attachments from the cache to get the actual ones
-					$this->cache->destroy('attachments');
+					$this->cache->destroy('_mot_diag_attachments');
 					// Remove the orphaned items from the cache to get the actual ones
-					$this->cache->destroy('orphaned_items');
+					$this->cache->destroy('_mot_diag_orphaned_items');
 					trigger_error($this->language->lang('ACP_MOT_DIAGNOSIS_ITEMS_DELETED', count($del_items_arr)) . adm_back_link($this->u_action), E_USER_NOTICE);
 				}
 				else
@@ -180,13 +191,13 @@ class mot_diagnosis_acp
 				{
 					foreach ($del_files_arr as $element)
 					{
-						unlink($dir . '/' . $element);
+						unlink($files_dir . '/' . $element);
 					}
 
 					// Remove the attm_files from the cache to get the actual ones from the '/files' directory
-					$this->cache->destroy('attm_files');
+					$this->cache->destroy('_mot_diag_attm_files');
 					// Remove the orphaned files from the cache to get the actual ones
-					$this->cache->destroy('orphaned_files');
+					$this->cache->destroy('_mot_diag_orphaned_files');
 					trigger_error($this->language->lang('ACP_MOT_DIAGNOSIS_FILES_DELETED', count($del_files_arr)) . adm_back_link($this->u_action . '&amp;mot_diagnosis_attachment_select=orphaned_files'), E_USER_NOTICE);
 				}
 				else
@@ -206,10 +217,10 @@ class mot_diagnosis_acp
 		}
 
 		// Get all attachments from DB
-		if (! $this->cache->_exists('attachments'))
+		if (! $this->cache->_exists('_mot_diag_attachments'))
 		{
 			$sql_ary = [
-				'SELECT'	=> 'a.attach_id, a.physical_filename, a.real_filename, p.post_id, pm.msg_id',
+				'SELECT'	=> 'a.attach_id, a.poster_id, a.physical_filename, a.real_filename, p.post_id, pm.msg_id',
 
 				'FROM'		=> [ATTACHMENTS_TABLE => 'a'],
 
@@ -224,7 +235,7 @@ class mot_diagnosis_acp
 						],
 				],
 
-				'ORDER_BY'	=> 'a.post_msg_id ASC',
+				'ORDER_BY'	=> 'a.attach_id ASC',
 			];
 			$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 			// $sql = 'SELECT attach_id, physical_filename, real_filename, post_msg_id, in_message FROM ' . ATTACHMENTS_TABLE;
@@ -232,40 +243,40 @@ class mot_diagnosis_acp
 			$attachments = $this->db->sql_fetchrowset($result);
 			$this->db->sql_freeresult($result);
 
-			$this->cache->put('attachments', $attachments, $cache_ttl);
+			$this->cache->put('_mot_diag_attachments', $attachments, $cache_ttl);
 		}
 		else
 		{
-			$attachments = $this->cache->get('attachments');
+			$attachments = $this->cache->get('_mot_diag_attachments');
 		}
 
 		// Get all files (except .htaccess and index.htm) from the /files directory and store their names in an array
 		$attm_files = [];
-		$path = scandir($dir);
+		$path = scandir($files_dir);
 
-		if (! $this->cache->_exists('attm_files'))
+		if (! $this->cache->_exists('_mot_diag_attm_files'))
 		{
 			foreach ($path as $element)
 			{
-				if (is_file ($dir . '/' . $element) && !in_array($element, ['.htaccess', 'index.htm']))
+				if (is_file ($files_dir . '/' . $element) && !in_array($element, ['.htaccess', 'index.htm']))
 				{
 					$attm_files[] = $element;
 				}
 			}
 
-			$this->cache->put('attm_files', $attm_files, $cache_ttl);
+			$this->cache->put('_mot_diag_attm_files', $attm_files, $cache_ttl);
 		}
 		else
 		{
-			$attm_files = $this->cache->get('attm_files');
+			$attm_files = $this->cache->get('_mot_diag_attm_files');
 		}
 
 		$orphaned_items = [];	// Holds all (physical) filenames of those files which are indexed in the DB but do not exist in the /files directory
 		$physical_files = [];	// Holds all (physical) filenames of those files which are indexed in the DB
 
-		if (! $this->cache->_exists('orphaned_items'))
+		if (! $this->cache->_exists('_mot_diag_orphaned_items'))
 		{
-			foreach ($attachments as $row)
+			foreach ($attachments as &$row)
 			{
 				if (!in_array($row['physical_filename'], $attm_files))
 				{
@@ -274,31 +285,35 @@ class mot_diagnosis_acp
 				$physical_files[] = $row['physical_filename'];
 			}
 
-			$this->cache->put('orphaned_items', $orphaned_items, $cache_ttl);
-			$this->cache->put('physical_files', $physical_files, $cache_ttl);
+			$this->cache->put('_mot_diag_orphaned_items', $orphaned_items, $cache_ttl);
+			$this->cache->put('_mot_diag_physical_files', $physical_files, $cache_ttl);
 		}
 		else
 		{
-			$orphaned_items = $this->cache->get('orphaned_items');
-			$physical_files = $this->cache->get('physical_files');
+			$orphaned_items = $this->cache->get('_mot_diag_orphaned_items');
+			$physical_files = $this->cache->get('_mot_diag_physical_files');
 		}
 
 		$orphaned_files = [];
-		if (! $this->cache->_exists('orphaned_files'))
+		if (! $this->cache->_exists('_mot_diag_orphaned_files'))
 		{
 			foreach ($attm_files as $file)
 			{
+				$file_info = [];
 				if (!in_array($file, $physical_files))
 				{
-					$orphaned_files[] = $file;
+					$file_info['filename'] = $file;
+					$file_info['filetime'] = filemtime($files_dir . '/' . $file);
+					$file_info['last_modified'] = $this->user->format_date($file_info['filetime']);
+					$orphaned_files[] = $file_info;
 				}
 			}
 
-			$this->cache->put('orphaned_files', $orphaned_files, $cache_ttl);
+			$this->cache->put('_mot_diag_orphaned_files', $orphaned_files, $cache_ttl);
 		}
 		else
 		{
-			$orphaned_files = $this->cache->get('orphaned_files');
+			$orphaned_files = $this->cache->get('_mot_diag_orphaned_files');
 		}
 
 		$attachment_select = [
@@ -310,18 +325,44 @@ class mot_diagnosis_acp
 		$orphaned_files_count = count ($orphaned_files);
 
 		//base url for pagination, filtering and sorting
-		$base_url = $this->u_action . '&amp;mot_diagnosis_attachment_select=' . $attachment_selected;
+		$base_url = $this->u_action .	'&amp;mot_diagnosis_attachment_select=' . $attachment_selected .
+										'&amp;mot_diagnosis_last_select=' . $last_selected .
+										'&amp;sort_dir=' . $sort_dir;
 
-		// Load pagination
+		// Load pagination and sort keys and sort array accordingly
 		if ($attachment_selected == 'orphaned_items')
 		{
+			$this->sort_key_arr = [
+				'ACP_MOT_DIAGNOSIS_ATTM_POST_ID'	=> 'attach_id',
+				'ACP_MOT_DIAGNOSIS_ATTM_PHYS_NAME'	=> 'physical_filename',
+				'ACP_MOT_DIAGNOSIS_ATTM_REAL_NAME'	=> 'real_filename',
+				'ACP_MOT_DIAGNOSIS_ATTM_USER_ID'	=> 'poster_id',
+			];
+			$sort_key = in_array($sort_key, ['attach_id', 'physical_filename', 'real_filename', 'poster_id']) ? $sort_key : 'attach_id';
+
+			$base_url .= '&amp;sort_key=' . $sort_key;
+
 			$start = $this->pagination->validate_start($start, $limit, $orphaned_items_count);
 			$this->pagination->generate_template_pagination($base_url, 'pagination', 'start', $orphaned_items_count, $limit, $start);
+
+			$key_row = array_column($orphaned_items, $sort_key);
+			array_multisort($key_row, $sort_dir == 'ASC' ? SORT_ASC : SORT_DESC, $orphaned_items);
 		}
 		if ($attachment_selected == 'orphaned_files')
 		{
+			$this->sort_key_arr = [
+				'ACP_MOT_DIAGNOSIS_ATTM_PHYS_NAME'		=> 'filename',
+				'ACP_MOT_DIAGNOSIS_ATTM_LAST_MODIFY'	=> 'filetime',
+			];
+			$sort_key = in_array($sort_key, ['filename', 'filetime']) ? $sort_key : 'filename';
+
+			$base_url .= '&amp;sort_key=' . $sort_key;
+
 			$start = $this->pagination->validate_start($start, $limit, $orphaned_files_count);
 			$this->pagination->generate_template_pagination($base_url, 'pagination', 'start', $orphaned_files_count, $limit, $start);
+
+			$key_row = array_column($orphaned_files, $sort_key);
+			array_multisort($key_row, $sort_dir == 'ASC' ? SORT_ASC : SORT_DESC, $orphaned_files);
 		}
 
 		$this->template->assign_vars([
@@ -332,7 +373,10 @@ class mot_diagnosis_acp
 			'ACP_MOT_DIAGNOSIS_ORPHANED_FILES'			=> array_slice($orphaned_files, $start, $limit),
 			'ACP_MOT_DIAGNOSIS_ORPHANED_FILES_COUNT'	=> $orphaned_files_count,
 			'ACP_MOT_DIAGNOSIS_SCRIPT_PATH'				=> $this->config['script_path'],
+			'ACP_MOT_DIAGNOSIS_SORT_KEY_ARR'			=> $this->select_struct($sort_key, $this->sort_key_arr),
+			'ACP_MOT_DIAGNOSIS_SORT_DIR_ARR'			=> $this->select_struct($sort_dir, $this->sort_dir_arr),
 			'ACP_MOT_DIAGNOSIS_VERSION'					=> $this->language->lang('ACP_MOT_DIAGNOSIS_VERSION', $this->diagnosis_version, date('Y')),
+			'ACP_MOT_DIAGNOSIS_LAST_SELECT'				=> $attachment_selected,
 			'U_ACTION'									=> $this->u_action,
 		]);
 	}

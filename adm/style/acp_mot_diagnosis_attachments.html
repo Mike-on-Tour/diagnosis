@@ -1,6 +1,6 @@
 {#
 *
-* @package MoT phpBB Diagnosis v0.1.1
+* @package MoT phpBB Diagnosis v0.2.0
 * @copyright (c) 2025 - 2026 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -42,6 +42,7 @@
 				<tr>
 					<th>{{ lang('ACP_MOT_DIAGNOSIS_ATTM_PHYS_NAME') }}</th>
 					<th>{{ lang('ACP_MOT_DIAGNOSIS_ATTM_REAL_NAME') }}</th>
+					<th>{{ lang('ACP_MOT_DIAGNOSIS_ATTM_USER_ID') }}</th>
 					<th>{{ lang('ACP_MOT_DIAGNOSIS_ATTM_POST_ID') }}</th>
 					<th>{{ lang('ACP_MOT_DIAGNOSIS_ATTM_MSG_ID') }}</th>
 					<th style="text-align: center;">{{ lang('MARK') }}</th>
@@ -53,6 +54,7 @@
 					<tr>
 						<td>{{ item.physical_filename }}</td>
 						<td>{{ item.real_filename }}</td>
+						<td>{{ item.poster_id }}</td>
 						<td>
 							{% if item.post_id is defined %}
 								<a href="{{ ACP_MOT_DIAGNOSIS_SCRIPT_PATH }}/viewtopic.php?p={{ item.post_id }}#p{{ item.post_id }}" target="_blank" title="{{ lang('ACP_MOT_DIAGNOSIS_ATTM_POST_ID_TITLE') }}">
@@ -69,7 +71,7 @@
 					</tr>
 				{% else %}
 					<tr>
-						<td colspan="5" style="text-align: center;">{{ lang(ACP_MOT_DIAGNOSIS_NO_ITEMS) }}</td>
+						<td colspan="6" style="text-align: center;">{{ lang('ACP_MOT_DIAGNOSIS_NO_ITEMS') }}</td>
 					</tr>
 				{% endfor %}
 			</tbody>
@@ -81,7 +83,20 @@
 			</div>
 		{% endif %}
 
+		{% if ACP_MOT_DIAGNOSIS_ORPHANED_ITEMS_COUNT > 1 %}
+			<fieldset class="display-options">
+				{{ lang('SORT_BY') ~ lang('COLON') }}&nbsp;
+
+				{{ forms.select('sort_key', ACP_MOT_DIAGNOSIS_SORT_KEY_ARR) }}&nbsp;
+
+				{{ forms.select('sort_dir', ACP_MOT_DIAGNOSIS_SORT_DIR_ARR) }}&nbsp;
+
+				<input class="button2" type="submit" value="{{ lang('GO') }}" name="sort">
+			</fieldset>
+		{% endif %}
+
 		{% if ACP_MOT_DIAGNOSIS_ORPHANED_ITEMS_COUNT %}
+			<hr>
 			<fieldset class="quick">
 				<input class="button2" type="submit" name="mot_diagnosis_del_marked_items" value="{{ lang('DELETE_MARKED') }}"><br>
 				<p class="small">
@@ -93,7 +108,7 @@
 	{% endif %}
 
 	{% if ACP_MOT_DIAGNOSIS_ATTM_SELECTED == 'orphaned_files' %}
-		<p>{{ lang('ACP_MOT_DIAGNOSIS_ENTRY_TABLE_EXPL') }}</p>
+		<p>{{ lang('ACP_MOT_DIAGNOSIS_FILES_TABLE_EXPL') }}</p>
 
 		<div class="pagination top-pagination">
 			{% if ACP_MOT_DIAGNOSIS_ORPHANED_FILES_COUNT %}
@@ -109,14 +124,16 @@
 			</thead>
 				<tr>
 					<th>{{ lang('ACP_MOT_DIAGNOSIS_ATTM_PHYS_NAME') }}</th>
+					<th>{{ lang('ACP_MOT_DIAGNOSIS_ATTM_LAST_MODIFY') }}</th>
 					<th style="text-align: center; width: 10%;">{{ lang('MARK') }}</th>
 				</tr>
 
 			<tbody>
 				{% for file in ACP_MOT_DIAGNOSIS_ORPHANED_FILES %}
 					<tr>
-						<td>{{ file }}</td>
-						<td style="text-align: center;"><input type="checkbox" class="radio" name="mot_diagnosis_files_mark_delete[]" value="{{ file }}"></td>
+						<td>{{ file.filename }}</td>
+						<td>{{ file.last_modified }}</td>
+						<td style="text-align: center;"><input type="checkbox" class="radio" name="mot_diagnosis_files_mark_delete[]" value="{{ file.filename }}"></td>
 					</tr>
 				{% else %}
 					<tr>
@@ -132,6 +149,18 @@
 			</div>
 		{% endif %}
 
+		{% if ACP_MOT_DIAGNOSIS_ORPHANED_FILES_COUNT > 1 %}
+			<fieldset class="display-options">
+				{{ lang('SORT_BY') ~ lang('COLON') }}&nbsp;
+
+				{{ forms.select('sort_key', ACP_MOT_DIAGNOSIS_SORT_KEY_ARR) }}&nbsp;
+
+				{{ forms.select('sort_dir', ACP_MOT_DIAGNOSIS_SORT_DIR_ARR) }}&nbsp;
+
+				<input class="button2" type="submit" value="{{ lang('GO') }}" name="sort">
+			</fieldset>
+		{% endif %}
+
 		{% if ACP_MOT_DIAGNOSIS_ORPHANED_FILES_COUNT %}
 			<fieldset class="quick">
 				<input class="button2" type="submit" name="mot_diagnosis_del_marked_files" value="{{ lang('DELETE_MARKED') }}"><br>
@@ -142,6 +171,8 @@
 			</fieldset>
 		{% endif %}
 	{% endif %}
+
+	<input type="hidden" name="mot_diagnosis_last_select" value="{{ ACP_MOT_DIAGNOSIS_LAST_SELECT }}">
 </form>
 
 <br><br>

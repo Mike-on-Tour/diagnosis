@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT phpBB Diagnosis v0.1.0
+* @package MoT phpBB Diagnosis v0.2.0
 * @copyright (c) 2025 - 2026 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -74,8 +74,11 @@ $lang = array_merge($lang, [
 	'ACP_MOT_DIAGNOSIS_ATTM_PHYS_NAME'		=> 'Physikalischer Dateiname',
 	'ACP_MOT_DIAGNOSIS_ATTM_REAL_NAME'		=> 'Tatsächlicher Dateiname',
 	'ACP_MOT_DIAGNOSIS_ATTM_POST_ID'		=> 'Beitrags-Id',
+	'ACP_MOT_DIAGNOSIS_ATTM_USER_ID'		=> 'Mitglieder-Id',
 	'ACP_MOT_DIAGNOSIS_ATTM_POST_ID_TITLE'	=> 'Link zum Beitrag, in dem dieser Dateianhang genutzt wird',
 	'ACP_MOT_DIAGNOSIS_ATTM_MSG_ID'			=> 'PN-Id',
+	'ACP_MOT_DIAGNOSIS_SORT_ASC'			=> 'Aufsteigend',
+	'ACP_MOT_DIAGNOSIS_SORT_DESC'			=> 'Absteigend',
 	'ACP_MOT_DIAGNOSIS_NO_ITEM_SELECTED'	=> 'Es wurde kein DB-Eintrag zum Löschen markiert. Bitte mindestens einen DB-Eintrag markieren.',
 	'ACP_MOT_DIAGNOSIS_CONFIRM_ITEM_DEL'	=> [
 		1	=> 'Wollen Sie wirklich 1 Eintrag aus der ATTACHMENTS_TABLE löschen?<br><br>Damit wird der Eintrag endgültig aus der Datenbank entfernt, <strong>dieser Vorgang kann nicht rückgängig gemacht werden!</strong>',
@@ -85,8 +88,9 @@ $lang = array_merge($lang, [
 		1	=> '1 Eintrag erfolgreich gelöscht.',
 		1	=> '%1$d Einträge erfolgreich gelöscht.',
 	],
-	'ACP_MOT_DIAGNOSIS_ENTRY_TABLE_EXPL'	=> 'In der folgenden Tabelle werden alle Dateien mit ihrem physikalischen Dateinamen aufgelistet, für die es in der ATTACHMENTS_TABLE
+	'ACP_MOT_DIAGNOSIS_FILES_TABLE_EXPL'	=> 'In der folgenden Tabelle werden alle Dateien mit ihrem physikalischen Dateinamen aufgelistet, für die es in der ATTACHMENTS_TABLE
 												keinen Eintrag gibt (verwaiste Dateien).',
+	'ACP_MOT_DIAGNOSIS_ATTM_LAST_MODIFY'	=> 'Datum der letzten Änderung',
 	'ACP_MOT_DIAGNOSIS_NO_FILE_SELECTED'	=> 'Es wurde keine Datei zum Löschen markiert. Bitte mindestens eine Datei markieren.',
 	'ACP_MOT_DIAGNOSIS_CONFIRM_FILE_DEL'	=> [
 		1	=> 'Wollen Sie wirklich 1 Datei aus dem Verzeichnis `/files` löschen?<br><br>Damit wird die Datei endgültig gelöscht, <strong>dieser Vorgang kann nicht rückgängig gemacht werden!</strong>',
@@ -94,6 +98,6 @@ $lang = array_merge($lang, [
 	],
 	'ACP_MOT_DIAGNOSIS_FILES_DELETED'		=> [
 		1	=> '1 Datei erfolgreich gelöscht.',
-		1	=> '%1$d Dateien erfolgreich gelöscht.',
+		2	=> '%1$d Dateien erfolgreich gelöscht.',
 	],
 ]);

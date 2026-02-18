@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT phpBB Diagnosis v0.2.0
+* @package MoT phpBB Diagnosis v0.3.0
 * @copyright (c) 2025 - 2026 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -58,7 +58,15 @@ $lang = array_merge($lang, [
 	'ACP_MOT_DIAGNOSIS_ATTACHMENTS'			=> 'Dateianhänge',
 	'ACP_MOT_DIAGNOSIS_ATTACHMENTS_EXPL'	=> 'Auf dieser Seite können Sie wahlweise prüfen, ob in der Tabelle für Dateianhänge (ATTACHMENTS_TABLE) auf Dateien verwiesen wird,
 												die im entsprechenden Verzeichnis `/files` nicht (mehr) existieren (verwaiste DB-Einträge) bzw. ob sich in diesem Verzeichnis
-												Dateien befinden, für die es keinen Eintrag in der Tabelle gibt (verwaiste Dateien).',
+												Dateien befinden, für die es keinen Eintrag in der Tabelle gibt (verwaiste Dateien). Beachten Sie bitte, dass dies nicht identisch
+												mit der Administrator-Funktion ´Verwaiste Dateianhänge´ ist, die nur nach DB-Einträgen sucht, die keinem Beitrag oder einer
+												PN zugeordnet sind.<br>
+												Je höher die Anzahl der Dateianhänge ist, umso länger dauert der Prozess zum Auffinden verwaister DB-Einträge bzw. verwaister
+												Dateien, deshalb wird das Ergebnis im Cache gespeichert. Diese Speicherung gilt für die eingestellte Sitzungslänge und verhindert
+												Verzögerungen beim Umschalten zwischen diesen beiden Tabellen bzw. beim Aufrufen weiterer Tabellenseiten.<br>
+												Werden verwaiste DB-Einträge oder Dateien gelöscht, werden die Daten erneut eingelesen und neu im Cache gespeichert.',
+	'ACP_MOT_DIAGNOSIS_ATTM_REFRESH_EXPL'	=> 'Durch Anklicken der folgenden Schaltfläche können Sie die im Cache gespeicherten Daten löschen und neu einlesen',
+	'ACP_MOT_DIAGNOSIS_ATTM_REFRESH'		=> 'Daten aktualisieren',
 	'ACP_MOT_DIAGNOSIS_ATTM_SELECT'			=> 'Zeige verwaiste ',
 	'ACP_MOT_DIAGNOSIS_ORPHANED_FILES'		=> 'Dateien',
 	'ACP_MOT_DIAGNOSIS_ORPHANED_ITEMS'		=> 'DB-Einträge',
@@ -73,6 +81,7 @@ $lang = array_merge($lang, [
 	'ACP_MOT_DIAGNOSIS_NO_ITEMS'			=> 'Keine Einträge',
 	'ACP_MOT_DIAGNOSIS_ATTM_PHYS_NAME'		=> 'Physikalischer Dateiname',
 	'ACP_MOT_DIAGNOSIS_ATTM_REAL_NAME'		=> 'Tatsächlicher Dateiname',
+	'ACP_MOT_DIAGNOSIS_ATTM_ATTACH_ID'		=> 'Anhangs-Id',
 	'ACP_MOT_DIAGNOSIS_ATTM_POST_ID'		=> 'Beitrags-Id',
 	'ACP_MOT_DIAGNOSIS_ATTM_USER_ID'		=> 'Mitglieder-Id',
 	'ACP_MOT_DIAGNOSIS_ATTM_POST_ID_TITLE'	=> 'Link zum Beitrag, in dem dieser Dateianhang genutzt wird',
@@ -86,7 +95,7 @@ $lang = array_merge($lang, [
 	],
 	'ACP_MOT_DIAGNOSIS_ITEMS_DELETED'		=> [
 		1	=> '1 Eintrag erfolgreich gelöscht.',
-		1	=> '%1$d Einträge erfolgreich gelöscht.',
+		2	=> '%1$d Einträge erfolgreich gelöscht.',
 	],
 	'ACP_MOT_DIAGNOSIS_FILES_TABLE_EXPL'	=> 'In der folgenden Tabelle werden alle Dateien mit ihrem physikalischen Dateinamen aufgelistet, für die es in der ATTACHMENTS_TABLE
 												keinen Eintrag gibt (verwaiste Dateien).',

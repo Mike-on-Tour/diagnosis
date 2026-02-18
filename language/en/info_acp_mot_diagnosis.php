@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT phpBB Diagnosis v0.2.0
+* @package MoT phpBB Diagnosis v0.3.0
 * @copyright (c) 2025 - 2026 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -39,10 +39,10 @@ $lang = array_merge($lang, [
 	// Cron status
 	'ACP_MOT_DIAGNOSIS_CRONSTATUS'			=> 'Cron status',
 	'ACP_MOT_DIAGNOSIS_CRON_TABLE_EXPL'		=> 'The following table contains all cron tasks which were found within the service container. If the program was able to deduce the
-												period between two runs and the time of the last run contained in the CONFIG_TABLE from the name those values will be diplayed
-												as well.
+												period between two runs and the time of the last run contained in the CONFIG_TABLE from the task`s name those values will be
+												diplayed as well.
 												Active cron tasks are printed in green letters, inactive ones in darkblue.<br>
-												An asterisk behind the cron task name indicates that this task satisfies all condition to run and waits for a trigger to start it,
+												An asterisk behind the cron task name indicates that this task satisfies all conditions to run and waits for a trigger to start it,
 												this can even be the case with inactice cron tasks.',
 	'ACP_MOT_DIAGNOSIS_CRON_NAME'			=> 'Cron task name',
 	'ACP_MOT_DIAGNOSIS_CRON_CLASS'			=> 'Cron task class including path',
@@ -58,10 +58,18 @@ $lang = array_merge($lang, [
 	'ACP_MOT_DIAGNOSIS_ATTACHMENTS'			=> 'File attachments',
 	'ACP_MOT_DIAGNOSIS_ATTACHMENTS_EXPL'	=> 'On this page you have the options of either checking the database table holding attached files (ATTACHMENTS_TABLE) for entries
 												which do no longer have a corresponding file in the `/files` directory (orphaned database items) or checking the `/files` directory
-												for files which do not have a corresponding entry within the database table (orphaned files).',
+												for files which do not have a corresponding entry within the database table (orphaned files). Please be aware that this is different
+												from phpBB`s ACP function ´Orphaned attachments´ which solely looks for database items without a corresponding post or PM.<br>
+												The higher the number of file attachments the longer the process of finding orphaned database items and orphaned files will take,
+												therefore this data will be stored in the cache with a lifetime identical to the session length in order to prevent delays while
+												switching between tables or to another table page.<br>
+												After deleting orphaned database items or files the altered data has to be read again and stored in the cache which again will result
+												in a longer loading time.',
+	'ACP_MOT_DIAGNOSIS_ATTM_REFRESH_EXPL'	=> 'By clicking the button to the right you can delete the data stored in the cache and recreate it',
+	'ACP_MOT_DIAGNOSIS_ATTM_REFRESH'		=> 'Refresh data',
 	'ACP_MOT_DIAGNOSIS_ATTM_SELECT'			=> 'Show orphaned ',
-	'ACP_MOT_DIAGNOSIS_ORPHANED_FILES'		=> 'Files',
-	'ACP_MOT_DIAGNOSIS_ORPHANED_ITEMS'		=> 'Database items',
+	'ACP_MOT_DIAGNOSIS_ORPHANED_FILES'		=> 'files',
+	'ACP_MOT_DIAGNOSIS_ORPHANED_ITEMS'		=> 'database items',
 	'ACP_MOT_DIAGNOSIS_ATTM_TABLE_EXPL'		=> 'The following table displays all items of the database table holding the file attachments (ATTACHMENTS_TABLE) for which there is no
 												corresponding file found in the `\files` directory (orphaned database items).<br>
 												The column `Post id` contains a link to the post where the attachment is used, the column `PM id` shows the id of the personal
@@ -73,6 +81,7 @@ $lang = array_merge($lang, [
 	'ACP_MOT_DIAGNOSIS_NO_ITEMS'			=> 'No items',
 	'ACP_MOT_DIAGNOSIS_ATTM_PHYS_NAME'		=> 'Physical filename',
 	'ACP_MOT_DIAGNOSIS_ATTM_REAL_NAME'		=> 'Real filename',
+	'ACP_MOT_DIAGNOSIS_ATTM_ATTACH_ID'		=> 'Attachment id',
 	'ACP_MOT_DIAGNOSIS_ATTM_POST_ID'		=> 'Post id',
 	'ACP_MOT_DIAGNOSIS_ATTM_USER_ID'		=> 'User id',
 	'ACP_MOT_DIAGNOSIS_ATTM_POST_ID_TITLE'	=> 'Link to the post using this attachment',
@@ -86,7 +95,7 @@ $lang = array_merge($lang, [
 	],
 	'ACP_MOT_DIAGNOSIS_ITEMS_DELETED'		=> [
 		1	=> '1 item successfully deleted.',
-		1	=> '%1$d items successfully deleted.',
+		2	=> '%1$d items successfully deleted.',
 	],
 	'ACP_MOT_DIAGNOSIS_FILES_TABLE_EXPL'	=> 'The following table displays all files with their physical filename from the `/files` directory which do not have a corresponding
 												entry within the ATTACHMENTS_TABLE (orphaned files).',

@@ -1,15 +1,15 @@
 <?php
 /**
 *
-* @package MoT phpBB Diagnosis v0.0.1
-* @copyright (c) 2025 Mike-on-Tour
+* @package MoT phpBB Diagnosis v0.3.0
+* @copyright (c) 2025 - 2026 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace mot\diagnosis\migrations;
 
-class v_0_0_1 extends \phpbb\db\migration\migration
+class v_0_3_0 extends \phpbb\db\migration\migration
 {
 	/**
 	* If our first ACP module already exists in the db skip this migration.
@@ -35,9 +35,7 @@ class v_0_0_1 extends \phpbb\db\migration\migration
 				'ACP_MOT_DIAGNOSIS',
 				[
 					'module_basename'	=> '\mot\diagnosis\acp\mot_diagnosis_acp_module',
-					'module_langname'	=> 'ACP_MOT_DIAGNOSIS_CRONSTATUS',
-					'module_mode'		=> 'cronstatus',
-					'module_auth'		=> 'ext_mot/diagnosis && acl_a_board',
+					'modes'				=> ['cronstatus', 'attachments',],
 				],
 			]],
 		];

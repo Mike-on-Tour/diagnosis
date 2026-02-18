@@ -3,8 +3,8 @@
 	"type": "phpbb-extension",
 	"description": "An extension to get phpBB diagnosis",
 	"homepage": "https://www.mike-on-tour.com",
-	"version": "0.2.0",
-	"time": "2026-02-08 12:11:57",
+	"version": "0.3.0",
+	"time": "2026-02-18 12:11:57",
 	"keywords": ["phpbb", "extension", "diagnosis"],
 	"license": "GPL-2.0-only",
 	"authors": [

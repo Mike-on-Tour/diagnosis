@@ -4,10 +4,29 @@ All changes to `MoT phpBB Diagnosis` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.0] - 2026-02-18
+
+### Added
+-	The user's id who posted the attachment to the table displaying the orphaned items, this id is a link to this user's profile, too
+-	A loading indicator to the attachment tables' sorting `Go` button and to the "Back to previous page" link of the successbox after deleting items or files
+-	A `Refresh data` button to the "File attachments" tab
+-	Another sorting key to the orphaned items table to enable sorting by the post/message id of the ATTACHMENTS_TABLE (`Post id`)  
+	Please refer to the "Fixed" section because this sorting key previously was a mis-namer
+  
+### Changed
+-	Made one migration file from the previuosly two files
+-	The explanation for the "File attachments" tab
+  
+### Fixed
+-	A wrong plural statement in the ACP language files
+-	A wrong sorting key designator (`Post id`) in the orphaned items table which actually was the attachment id from the ATTACHMENTS_TABLE, it now reads `Attachment id`
+   
+### Removed
+  
+  
 ## [0.2.0] - 2026-02-08
 
 ### Added
--	A loading indicator to the attachments tab to show the user that something is happening when we need some time to load and sift through all the arrays to compare files and DB
 -	Sorting key and directions selectors to the 'File attachments' tables
 -	A column to the orphaned items table holding the user id of the user who posted that attachment, table can be sorted by this column as well
   
@@ -16,8 +35,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -	Time-to-live (TTL) for the cached data is now set to the session length and no longer a set value
   
 ### Fixed
--	A wrong `colspan` definition within the orphaned files table
--	A wrong language variable within the orphaned files table
    
 ### Removed
   

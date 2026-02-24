@@ -1,6 +1,6 @@
 {#
 *
-* @package MoT phpBB Diagnosis v0.3.0
+* @package MoT phpBB Diagnosis v0.3.1
 * @copyright (c) 2025 - 2026 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -26,8 +26,10 @@
 			});
 		}
 
-		$(".successbox p a").on('click', function() {
-			$('#loading_indicator').show();
-		});
+		if ({{ ACP_MOT_DIAGNOSIS_ADM_BACKLINK }}) {
+			$(".successbox p a").on('click', function() {
+					$('#loading_indicator').show();
+			});
+		}
 	})(jQuery);
 </script>

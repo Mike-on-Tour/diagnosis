@@ -4,6 +4,20 @@ All changes to `MoT phpBB Diagnosis` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.1] - 2026-02-24
+
+### Added
+  
+### Changed
+  
+### Fixed
+-	Displaying the loading indicator with all successboxes instead of only with the extension's successbox after deleting an item or a file by declaring a template variable
+	within `controller/mot_diagnosis_acp.php` which will be checked within `adm/style/event/acp_overall_footer_after.html` to make certain that the loading indicator will only
+	be bind to the extension's admin back link
+   
+### Removed
+  
+  
 ## [0.3.0] - 2026-02-18
 
 ### Added
@@ -18,6 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -	The explanation for the "File attachments" tab
   
 ### Fixed
+-	The check for valid cache data which formerly ran into a PHP error because it tried to get a count on an array being NULL
 -	A wrong plural statement in the ACP language files
 -	A wrong sorting key designator (`Post id`) in the orphaned items table which actually was the attachment id from the ATTACHMENTS_TABLE, it now reads `Attachment id`
    

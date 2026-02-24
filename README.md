@@ -1,6 +1,6 @@
 # MoT phpBB Diagnosis
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-green)  
+![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-green)  
   
 ![phpBB >=3.3.4, < 3.4.0@dev](https://img.shields.io/badge/phpBB->=3.3.4,%20<3.4.0@dev-009BDF)
 
@@ -29,4 +29,6 @@ The unaltered data will be cached as long as the session length is set.*
 
 This tab will show you two tables, either the table with orphaned database items (items without a corresponding file) or the table with the orphaned files (files without a
 corresponding database item), you can switch between those tables via the dropdown selector field in the upright corner; the default view is the table showing the orphaned
-database items.
+database items.  
+This function is not identical to phpBB's ACP function "Orphaned attachments" which solely looks for database items without a corresponding post or PM, but not for differences
+between the database and the content of the `/files` directory.

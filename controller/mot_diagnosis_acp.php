@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT phpBB Diagnosis v0.3.0
+* @package MoT phpBB Diagnosis v0.3.1
 * @copyright (c) 2025 - 2026 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -177,6 +177,7 @@ class mot_diagnosis_acp
 									'&amp;mot_diagnosis_last_select=' . $last_selected .
 									'&amp;sort_key=' . $sort_key .
 									'&amp;sort_dir=' . $sort_dir;
+					$this->template->assign_var('ACP_MOT_DIAGNOSIS_ADM_BACKLINK', true);
 
 					trigger_error($this->language->lang('ACP_MOT_DIAGNOSIS_ITEMS_DELETED', count($del_items_arr)) . adm_back_link($this->u_action . $cmd_params), E_USER_NOTICE);
 				}
@@ -221,6 +222,7 @@ class mot_diagnosis_acp
 									'&amp;mot_diagnosis_last_select=' . $last_selected .
 									'&amp;sort_key=' . $sort_key .
 									'&amp;sort_dir=' . $sort_dir;
+					$this->template->assign_var('ACP_MOT_DIAGNOSIS_ADM_BACKLINK', true);
 
 					trigger_error($this->language->lang('ACP_MOT_DIAGNOSIS_FILES_DELETED', count($del_files_arr)) . adm_back_link($this->u_action . $cmd_params), E_USER_NOTICE);
 				}

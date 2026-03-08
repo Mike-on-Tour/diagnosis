@@ -4,6 +4,19 @@ All changes to `MoT phpBB Diagnosis` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.2] - 2026-03-05
+
+### Added
+  
+### Changed
+  
+### Fixed
+-	An undefined variable (`ACP_MOT_DIAGNOSIS_ADM_BACKLINK`) within `adm/style/event/acp_overall_footer_after.html` which prevented displaying the loading indicator for the
+	attachments tab
+   
+### Removed
+  
+  
 ## [0.3.1] - 2026-02-24
 
 ### Added

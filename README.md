@@ -1,6 +1,6 @@
 # MoT phpBB Diagnosis
 
-![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-green)  
+![Version: 0.3.3](https://img.shields.io/badge/Version-0.3.3-green)  
   
 ![phpBB >=3.3.4, < 3.4.0@dev](https://img.shields.io/badge/phpBB->=3.3.4,%20<3.4.0@dev-009BDF)
 

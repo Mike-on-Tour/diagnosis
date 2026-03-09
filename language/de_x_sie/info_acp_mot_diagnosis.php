@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT phpBB Diagnosis v0.3.0
+* @package MoT phpBB Diagnosis v0.3.3
 * @copyright (c) 2025 - 2026 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -83,6 +83,7 @@ $lang = array_merge($lang, [
 	'ACP_MOT_DIAGNOSIS_ATTM_REAL_NAME'		=> 'Tatsächlicher Dateiname',
 	'ACP_MOT_DIAGNOSIS_ATTM_ATTACH_ID'		=> 'Anhangs-Id',
 	'ACP_MOT_DIAGNOSIS_ATTM_POST_ID'		=> 'Beitrags-Id',
+	'ACP_MOT_DIAGNOSIS_ATTM_USER_ID_TITLE'	=> 'Link zum Profil des Mitglieds, das den Dateianhang erstellt hat',
 	'ACP_MOT_DIAGNOSIS_ATTM_USER_ID'		=> 'Mitglieder-Id',
 	'ACP_MOT_DIAGNOSIS_ATTM_POST_ID_TITLE'	=> 'Link zum Beitrag, in dem dieser Dateianhang genutzt wird',
 	'ACP_MOT_DIAGNOSIS_ATTM_MSG_ID'			=> 'PN-Id',

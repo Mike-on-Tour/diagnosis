@@ -4,6 +4,20 @@ All changes to `MoT phpBB Diagnosis` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.3] - 2026-03-09
+
+### Added
+-	A title to the user id link in the attachments' DB items table
+  
+### Changed
+  
+### Fixed
+-	A problem using `script_path` with the links to user profiles and posts within the ataachments DB items table by using `{{ ROOT_PATH }}` instead
+   
+### Removed
+-	Definition of template variable `ACP_MOT_DIAGNOSIS_SCRIPT_PATH` in `controller/mot_diagnosis_acp.php`
+  
+  
 ## [0.3.2] - 2026-03-05
 
 ### Added

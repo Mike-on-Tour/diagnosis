@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT phpBB Diagnosis v0.3.1
+* @package MoT phpBB Diagnosis v0.3.3
 * @copyright (c) 2025 - 2026 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -388,7 +388,6 @@ class mot_diagnosis_acp
 			'ACP_MOT_DIAGNOSIS_ORPHANED_ITEMS_COUNT'	=> $orphaned_items_count,
 			'ACP_MOT_DIAGNOSIS_ORPHANED_FILES'			=> array_slice($orphaned_files, $start, $limit),
 			'ACP_MOT_DIAGNOSIS_ORPHANED_FILES_COUNT'	=> $orphaned_files_count,
-			'ACP_MOT_DIAGNOSIS_SCRIPT_PATH'				=> $this->config['script_path'],
 			'ACP_MOT_DIAGNOSIS_SORT_KEY_ARR'			=> $this->select_struct($sort_key, $this->sort_key_arr),
 			'ACP_MOT_DIAGNOSIS_SORT_DIR_ARR'			=> $this->select_struct($sort_dir, $this->sort_dir_arr),
 			'ACP_MOT_DIAGNOSIS_VERSION'					=> $this->language->lang('ACP_MOT_DIAGNOSIS_VERSION', $this->diagnosis_version, date('Y')),

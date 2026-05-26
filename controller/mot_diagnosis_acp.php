@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package MoT phpBB Diagnosis v0.3.3
+* @package MoT phpBB Diagnosis v0.3.4
 * @copyright (c) 2025 - 2026 Mike-on-Tour
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -326,6 +326,35 @@ class mot_diagnosis_acp
 					$file_info['last_modified'] = $this->user->format_date($file_info['filetime']);
 					$orphaned_files[] = $file_info;
 				}
+			}
+
+			// Check for thumbnails
+			$items_found = [];
+			$i = 0;
+			foreach ($orphaned_files as $file)
+			{
+				if (preg_match('/thumb_(?<filename>\d+_.+)/', $file['filename'], $matches))
+				{
+					$found = false;
+					foreach ($orphaned_files as $arr)
+					{
+						if ($arr['filename'] == $matches['filename'])
+						{
+							$found = true;
+							break;
+						}
+					}
+					if (!$found)
+					{
+						$items_found[] = $i;
+					}
+				}
+				$i++;
+			}
+			// Delete thumbs with no corresponding image file from the orphaned files array since they can not be orphaned
+			foreach ($items_found as $item)
+			{
+				unset($orphaned_files[$item]);
 			}
 
 			$this->cache->put('_mot_diag_orphaned_files', $orphaned_files, $cache_ttl);

@@ -4,6 +4,22 @@ All changes to `MoT phpBB Diagnosis` will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.3.4] - 2026-05-26
+
+### Added
+-	A function to the `ext.php` file to get the minimum and maximum versions and their respective conditions from the `require` section of the `composer.json` file in order to
+	prevent errors due to the duplicate entries in those two files
+  
+### Changed
+-	Minimum PHP version to 8.1.33 and minimum phpBB version to 3.3.9
+  
+### Fixed
+-	Displaying thumbnail files within the orphaned files table even if the corresponding DB items existed by checking for all thumbnail files whether their corresponding file is
+	actually orphaned and if it is not removing the thumbnail file from the orphaned files array thus not displaying it
+  
+### Removed
+  
+  
 ## [0.3.3] - 2026-03-09
 
 ### Added
